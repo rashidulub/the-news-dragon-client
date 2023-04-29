@@ -7,6 +7,8 @@ import News from "../Pages/News/News/News";
 import LoginLayout from "../Layoute/LoginLayout";
 import Login from "../Pages/Login/Login";
 import Ragister from "../Pages/Register/Ragister";
+import PrivateRoute from "./PrivateRoute";
+import Trems from "../Pages/Shared/Trems/Trems";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
         {
             path:'register',
             element:<Ragister></Ragister>
+        }
+        ,{
+            path:'trems',
+            element:<Trems></Trems>
         }
         
     ]
@@ -51,7 +57,8 @@ const router = createBrowserRouter([
     children: [
         {
             path: ':id',
-            element: <News></News>,
+            
+            element: <PrivateRoute><News></News></PrivateRoute>,
             loader: ({ params }) => fetch(`http://localhost:5000/news/${params.id}`)
         }
     ]

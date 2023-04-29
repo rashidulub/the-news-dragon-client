@@ -1,12 +1,43 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { AuthContext } from '../../Provider/AuthProvider';
 
 const Ragister = () => {
+
+    const {createUser}= useContext(AuthContext)
+    const [accepted, setAccepted]= useState(false)
+
+    const handleRegister = event=>{
+        event.preventDefault();
+        const form = event.target;
+        const name = form.name.value;
+        const email = form . email. value;
+        const password = form . password.value;
+        const photo = form.photo.value;
+
+        console.log(name, email, password);
+
+        createUser (email,password)
+        .then(result =>{
+            const createdUser = result.user;
+            console.log(createdUser);
+        })
+
+        .catch(error=>{
+            console.log(error);
+        }) 
+    }
+    const handleAccepted =event=>{
+       setAccepted(event.target.checked);
+
+    }
+
+
     return (
         <Container className='w-25 mx-auto mt-5'>
         <h2>Register Please</h2>
-        <Form>
+        <Form onSubmit={handleRegister}>
             <Form.Group className="mb-3" >
                 <Form.Label>Your Name</Form.Label>
                 <Form.Control type="text" name='name' placeholder="name" required />
@@ -28,10 +59,14 @@ const Ragister = () => {
                 <Form.Control type="password" name='password' placeholder="Password" required/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" name='accept' label="Accept Trams And Condition" />
+                <Form.Check 
+                onClick={handleAccepted}
+                type="checkbox" 
+                name='accept' 
+                label={<>Accept <Link className='text-decoration-none ' to='/trems'>Trams And Condition</Link></>} />
             </Form.Group>
-            <Button className='w-100' variant="primary" type="submit">
-                Login
+            <Button className='w-100' disabled={!accepted} variant="primary" type="submit">
+                Register
             </Button>
             <p className='mt-2'>Already Have An Account? <Link className='text-danger text-decoration-none' to='/login'>Login</Link></p>
             <Form.Text className="text-success">
